@@ -2,13 +2,14 @@ import os
 import argparse
 from pdf2image import convert_from_path
 
-def convert_pdf_to_images(pdf_path, dpi=200, fmt="png"):
+
+def convert_pdf_to_images(pdf_path, dpi=200, fmt="png", output_dir=None):
     # Extract folder and filename
     pdf_dir = os.path.dirname(pdf_path)
     pdf_name = os.path.splitext(os.path.basename(pdf_path))[0]
 
     # Create output folder next to the PDF
-    output_folder = os.path.join(pdf_dir, pdf_name)
+    output_folder = output_dir or os.path.join(pdf_dir, pdf_name)
     os.makedirs(output_folder, exist_ok=True)
 
     # Convert PDF to images
@@ -35,13 +36,15 @@ def main():
     parser.add_argument("pdf_path", help="Path to the PDF file")
     parser.add_argument("--dpi", type=int, default=200, help="Resolution (default 200)")
     parser.add_argument("--format", choices=["png", "jpeg", "jpg"], default="png", help="Image format")
+    parser.add_argument("--output-dir", help="Directory to write images (defaults next to the PDF)")
 
     args = parser.parse_args()
 
     convert_pdf_to_images(
         pdf_path=args.pdf_path,
         dpi=args.dpi,
-        fmt=args.format
+        fmt=args.format,
+        output_dir=args.output_dir
     )
 
 
